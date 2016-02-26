@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Files;
 import java.util.Base64;
 
 public class Filescan {
@@ -32,9 +33,13 @@ public class Filescan {
         moveFile(fileName, absolutePath);
     }
 
-    private static void moveFile(String fileName, String absolutePath) {
-        File customerFile = new File(absolutePath + "/IN/" + fileName);
-        customerFile.renameTo(new File(absolutePath + "/OUT/" + fileName));
+    private static void moveFile(String fileName, String absolutePath) throws Exception {
+        // renameTo fails on windows...
+        //File customerFile = new File(absolutePath + "/IN/" + fileName);
+        //customerFile.renameTo(new File(absolutePath + "/OUT/" + fileName));
+        Files.move(new File(absolutePath + "/IN/" + fileName).toPath(),
+                   new File(absolutePath + "/OUT/" + fileName).toPath(),
+                   java.nio.file.StandardCopyOption.REPLACE_EXISTING);
     }
 
     private static void uploadFile(String fileName, String absolutePath) throws Exception {
